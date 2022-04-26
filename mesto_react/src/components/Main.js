@@ -4,9 +4,9 @@ import api from '../utils/Api'
 import AvatarIcon from '../images/avatar_edit.png';
 
 function Main(props) {
-  const [userName, setUserName] = React.useState()
-  const [userDescription, setUserDescription] = React.useState()
-  const [userAvatar, setUserAvatar] = React.useState()
+  const [userName, setUserName] = React.useState('')
+  const [userDescription, setUserDescription] = React.useState('')
+  const [userAvatar, setUserAvatar] = React.useState('')
   const [cards, setCards] = React.useState([])
 
   React.useEffect(() => {
@@ -23,7 +23,6 @@ function Main(props) {
     api.getCards()
       .then((res) => {
         setCards(res)
-
       })
       .catch(err => console.log(`Ошибка.....: ${err}`))
   }, [])
@@ -48,7 +47,7 @@ function Main(props) {
 
       <div className="cards">
         {cards.map((card) => (
-          <Card card={card} key={card._id} />
+          <Card card={card} key={card._id}  onCardClick={props.onCardClick}/>
         ))}
 
       </div>

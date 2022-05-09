@@ -1,6 +1,7 @@
+
 import popupIcon from "../images/Close_Icon.svg";
 
-function PopupWithForm(props) {
+ function PopupWithForm(props) {
   return (
     <div className={`popup ${props.isOpen && "popup_opened"}`}>
       <div className="popup__container">
@@ -9,6 +10,7 @@ function PopupWithForm(props) {
           className={`popup__form popup__${props.name}-form`}
           name={`popup__${props.name}-form`}
           noValidate
+          onSubmit={props.onSubmit}
         >
           {props.children}
           <button type="submit" className="popup__button-save">

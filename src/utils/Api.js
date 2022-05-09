@@ -21,7 +21,7 @@ class Api {
       headers: this._options.headers,
       body: JSON.stringify({
         name: data.name,
-        about: data.job,
+        about: data.description,
       }),
     }).then((res) => (res.ok ? res.json() : Promise.reject(res.status)));
   }
@@ -31,8 +31,8 @@ class Api {
       method: "POST",
       headers: this._options.headers,
       body: JSON.stringify({
-        name: data.name,
-        link: data.link,
+        name: data.cardName,
+        link: data.cardLink,
       }),
     }).then((res) => (res.ok ? res.json() : Promise.reject(res.status)));
   }

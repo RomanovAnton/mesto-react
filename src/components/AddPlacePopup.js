@@ -25,7 +25,7 @@ function AddPlacePopup(props) {
       title="Новое место"
       isOpen={props.isOpen}
       onClose={props.onClose}
-      buttonText="Создать"
+      buttonText={props.statusSubmitButton}
       onSubmit={handleSubmit}
     >
       <input

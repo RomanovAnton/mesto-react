@@ -3,10 +3,10 @@ import "../index.css";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import DeleteConfirmPopup from "./DeleteConfirmPopup";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
@@ -15,10 +15,13 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
+  const [isDeleteConfirmPopupOpen, setDeleteConfirmPopupOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
-    
+  const [dataDeleteCard, setDataDeleteCard] = useState({});
+  const [statusSubbmitButton, setSubbmitButton] = useState("Сохранить");
+  const [statusDeleteButton, setStatusDeleteButton] = useState("Да");
 
   useEffect(() => {
     api
@@ -50,6 +53,11 @@ function App() {
     setEditAvatarPopupOpen(true);
   }
 
+  function handleBasketClick(card) {
+    setDeleteConfirmPopupOpen(true);
+    setDataDeleteCard(card);
+  }
+
   function handleCardClick(evt) {
     setSelectedCard(evt.target);
   }
@@ -58,28 +66,32 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
+    setDeleteConfirmPopupOpen(false);
     setSelectedCard({});
   }
 
   function handleUpdateUser(data) {
+    setSubbmitButton("Сохранение...");
     api
       .editProfile(data)
       .then((res) => {
         setCurrentUser(res);
       })
-      .catch((err) => console.log(`Ошибка.....: ${err}`));
-
+      .catch((err) => console.log(`Ошибка.....: ${err}`))
+      .finally(() => setSubbmitButton("Сохранить"));
     closeAllPopups();
   }
 
   function handleUpdateAvatar(data) {
+    setSubbmitButton("Сохранение...");
     api
       .changeAvatar(data)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
       })
-      .catch((err) => console.log(`Ошибка.....: ${err}`));
-    closeAllPopups();
+      .catch((err) => console.log(`Ошибка.....: ${err}`))
+      .finally(() => setSubbmitButton("Сохранить"));
   }
 
   function handleCardLike(card) {
@@ -105,17 +117,30 @@ function App() {
     }
   }
 
-  function handleDeleteCard(card) {
-    api.deleteCard(card._id).then(() => {
-      setCards((state) => state.filter((item) => item._id !== card._id));
-    });
+  function handleDeleteCard() {
+    setStatusDeleteButton("Удаление...");
+    api
+      .deleteCard(dataDeleteCard._id)
+      .then(() => {
+        setCards((state) =>
+          state.filter((item) => item._id !== dataDeleteCard._id)
+        );
+        closeAllPopups();
+      })
+      .catch((err) => console.log(`Ошибка.....: ${err}`))
+      .finally(() => setStatusDeleteButton("Да"));
   }
 
   function handleAddPlaceSubmit(data) {
-    api.addCard(data).then((newCard) => {
-      setCards([newCard, ...cards]);
-      closeAllPopups();
-    });
+    setSubbmitButton("Сохранение...");
+    api
+      .addCard(data)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(`Ошибка.....: ${err}`))
+      .finally(() => setSubbmitButton("Сохранить"));
   }
 
   return (
@@ -131,7 +156,7 @@ function App() {
             onCardClick={handleCardClick}
             cards={cards}
             onCardLike={handleCardLike}
-            onCardDelete={handleDeleteCard}
+            onCardDelete={handleBasketClick}
           />
 
           <Footer />
@@ -140,26 +165,27 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
-            
+            statusSubmitButton={statusSubbmitButton}
           />
           <AddPlacePopup
             onAddPlace={handleAddPlaceSubmit}
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
-            
+            statusSubmitButton={statusSubbmitButton}
           />
 
-          <PopupWithForm
-            name="delete-confirm"
-            title="Вы уверены?"
+          <DeleteConfirmPopup
+            isOpen={isDeleteConfirmPopupOpen}
             onClose={closeAllPopups}
-            buttonText="Да"
+            onDeleteCard={handleDeleteCard}
+            statusSubmitButton={statusDeleteButton}
           />
 
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
-            onUpdateUser={handleUpdateAvatar}
+            onUpdateAvatar={handleUpdateAvatar}
+            statusSubmitButton={statusSubbmitButton}
           />
 
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />

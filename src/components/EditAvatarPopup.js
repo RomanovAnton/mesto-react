@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from "react";
+import { useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup(props) {
@@ -6,7 +6,7 @@ function EditAvatarPopup(props) {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    props.onUpdateUser(avatarLink.current.value);
+    props.onUpdateAvatar(avatarLink.current.value);
     evt.target.reset();
   }
 
@@ -16,7 +16,7 @@ function EditAvatarPopup(props) {
       title="Обновить аватар"
       isOpen={props.isOpen}
       onClose={props.onClose}
-      buttonText="Сохранить"
+      buttonText={props.statusSubmitButton}
       onSubmit={handleSubmit}
     >
       <input

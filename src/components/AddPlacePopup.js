@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 function AddPlacePopup(props) {
@@ -16,8 +16,13 @@ function AddPlacePopup(props) {
   function handleSubmit(evt) {
     evt.preventDefault();
     props.onAddPlace({ cardName, cardLink });
-    evt.target.reset();
   }
+
+  useEffect(() => {
+    setCardName("");
+    setCardLink("");
+  }, [props.isOpen]);
+
 
   return (
     <PopupWithForm
@@ -38,6 +43,7 @@ function AddPlacePopup(props) {
         maxLength="30"
         id="popup__card-name"
         onChange={hundleChangeCardName}
+        value={cardName}
       />
       <span className="popup__input-error popup__card-name-error "></span>
       <input
@@ -48,6 +54,7 @@ function AddPlacePopup(props) {
         required
         id="popup__card-link"
         onChange={hundleChangeCardLink}
+        value={cardLink}
       />
       <span className="popup__input-error popup__card-link-error"></span>
     </PopupWithForm>

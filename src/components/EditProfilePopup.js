@@ -20,9 +20,9 @@ function EditProfilePopup(props) {
     props.onUpdateUser({ name, description });
   }
   useEffect(() => {
-    setName(currentUser.name ?? "");
-    setDescription(currentUser.about ?? "");
-  }, [currentUser]);
+    setName(currentUser.name);
+    setDescription(currentUser.about);
+  }, [currentUser, props.isOpen]);
 
   return (
     <PopupWithForm
@@ -43,7 +43,7 @@ function EditProfilePopup(props) {
         maxLength="40"
         id="popup__profile-name"
         onChange={hundleChangeName}
-        value={name}
+        value={name ?? ""}
       />
       <span className="popup__input-error popup__profile-name-error"></span>
       <input
@@ -56,7 +56,7 @@ function EditProfilePopup(props) {
         maxLength="200"
         id="popup__profile-job"
         onChange={hundleChangeDescription}
-        value={description}
+        value={description ?? ""}
       />
       <span className="popup__input-error popup__profile-job-error"></span>
     </PopupWithForm>

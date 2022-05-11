@@ -30,9 +30,7 @@ function App() {
         setCurrentUser(res);
       })
       .catch((err) => console.log(`Ошибка.....: ${err}`));
-  }, []);
 
-  useEffect(() => {
     api
       .getCards()
       .then((res) => {

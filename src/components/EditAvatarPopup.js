@@ -21,6 +21,8 @@ function EditAvatarPopup(props) {
       onClose={props.onClose}
       buttonText={props.statusSubmitButton}
       onSubmit={handleSubmit}
+      buttonState={props.buttonState}
+      onValidate={props.onValidate}
     >
       <input
         type="url"
@@ -31,7 +33,9 @@ function EditAvatarPopup(props) {
         id="popup__avatar-link"
         ref={avatarLink}
       />
-      <span className="popup__input-error popup__avatar-link-error"></span>
+      <span className="popup__input-error popup__avatar-link-error">
+        {props.errorMessage.avatarLink && props.errorMessage.avatarLink}
+      </span>
     </PopupWithForm>
   );
 }

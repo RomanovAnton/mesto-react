@@ -22,6 +22,8 @@ function App() {
   const [dataDeleteCard, setDataDeleteCard] = useState({});
   const [statusSubbmitButton, setSubbmitButton] = useState("Сохранить");
   const [statusDeleteButton, setStatusDeleteButton] = useState("Да");
+  const [errorMessage, setErrorMessage] = useState({});
+  const [buttonState, setButtonState] = useState(true);
 
   useEffect(() => {
     api
@@ -141,6 +143,24 @@ function App() {
       .finally(() => setSubbmitButton("Сохранить"));
   }
 
+  function checkInputValidity(evt) {
+    if (!evt.currentTarget.checkValidity()) {
+      setErrorMessage({
+        ...errorMessage,
+        [evt.target.name]: evt.target.validationMessage,
+      });
+      setButtonState(true);
+    } else {
+      setErrorMessage({});
+      setButtonState(false);
+    }
+  }
+
+  useEffect(() => {
+    setErrorMessage({});
+    setButtonState(true);
+  }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen]);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -164,12 +184,18 @@ function App() {
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
             statusSubmitButton={statusSubbmitButton}
+            onValidate={checkInputValidity}
+            buttonState={buttonState}
+            errorMessage={errorMessage}
           />
           <AddPlacePopup
             onAddPlace={handleAddPlaceSubmit}
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
             statusSubmitButton={statusSubbmitButton}
+            onValidate={checkInputValidity}
+            buttonState={buttonState}
+            errorMessage={errorMessage}
           />
 
           <DeleteConfirmPopup
@@ -184,6 +210,9 @@ function App() {
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
             statusSubmitButton={statusSubbmitButton}
+            onValidate={checkInputValidity}
+            buttonState={buttonState}
+            errorMessage={errorMessage}
           />
 
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />

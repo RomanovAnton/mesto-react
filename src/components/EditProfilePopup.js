@@ -31,7 +31,9 @@ function EditProfilePopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       buttonText={props.statusSubmitButton}
+      buttonState={props.buttonState}
       onSubmit={handleSubmit}
+      onValidate={props.onValidate}
     >
       <input
         type="text"
@@ -45,7 +47,9 @@ function EditProfilePopup(props) {
         onChange={hundleChangeName}
         value={name ?? ""}
       />
-      <span className="popup__input-error popup__profile-name-error"></span>
+      <span className="popup__input-error popup__profile-name-error">
+        {props.errorMessage.profileName && props.errorMessage.profileName}
+      </span>
       <input
         type="text"
         className="popup__input popup__profile-job"
@@ -58,7 +62,9 @@ function EditProfilePopup(props) {
         onChange={hundleChangeDescription}
         value={description ?? ""}
       />
-      <span className="popup__input-error popup__profile-job-error"></span>
+      <span className="popup__input-error popup__profile-job-error">
+        {props.errorMessage.profileJob && props.errorMessage.profileJob}
+      </span>
     </PopupWithForm>
   );
 }

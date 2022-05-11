@@ -32,6 +32,8 @@ function AddPlacePopup(props) {
       onClose={props.onClose}
       buttonText={props.statusSubmitButton}
       onSubmit={handleSubmit}
+      buttonState={props.buttonState}
+      onValidate={props.onValidate}
     >
       <input
         type="text"
@@ -45,7 +47,9 @@ function AddPlacePopup(props) {
         onChange={hundleChangeCardName}
         value={cardName}
       />
-      <span className="popup__input-error popup__card-name-error "></span>
+      <span className="popup__input-error popup__card-name-error ">
+      {props.errorMessage.name && props.errorMessage.name}
+      </span>
       <input
         type="url"
         className="popup__input popup__card-link"
@@ -56,7 +60,9 @@ function AddPlacePopup(props) {
         onChange={hundleChangeCardLink}
         value={cardLink}
       />
-      <span className="popup__input-error popup__card-link-error"></span>
+      <span className="popup__input-error popup__card-link-error">
+      {props.errorMessage.link && props.errorMessage.link}
+      </span>
     </PopupWithForm>
   );
 }
